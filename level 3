@@ -1,0 +1,116 @@
+public class Main {
+    public static void main(String[] args) {
+        String[] commands = {
+            "Answer CS2113 tutorial questions",
+            "weekly CS2113 quiz Monday 9pm",
+            "list",
+            "CS2113 lecture Friday 4 to 6pm",
+            "mark 1",
+            "list"
+        };
+        new Friday().run(commands);
+    }
+}
+
+public class Friday {
+
+    private Task[] tasks;
+    private int count;
+
+    public Friday() {
+        tasks = new Task[100];
+        count = 0;
+    }
+
+    public void run(String[] commands) {
+        System.out.println(" Why, hello there! I'm Friday.");
+        System.out.println(" Anything I can do for you?");
+        for (String input : commands) {
+            System.out.println(input);
+            if (input.equals("bye")) {
+                System.out.println(" Goodbye, then.");
+                break;
+            } else if (input.equals("list")) {
+                System.out.println(" Here's your task list:");
+                for (int i = 0; i < count; i++) {
+                    System.out.println(" " + (i + 1) + "." + tasks[i]);
+                }
+            } else if (input.startsWith("mark ")) {
+                markTask(input);
+            } else if (input.startsWith("unmark ")) {
+                unmarkTask(input);
+            } else {
+                addTask(input);
+            }
+        }
+    }
+
+    private void markTask(String input) {
+        String[] parts = input.split(" ");
+        if (parts.length == 2) {
+            try {
+                int index = Integer.parseInt(parts[1]);
+                if (index >= 1 && index <= count) {
+                    tasks[index - 1].markDone();
+                    System.out.println("Task done:");
+                    System.out.println("   " + tasks[index - 1]);
+                } else {
+                    System.out.println(" Invalid task number.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(" Please enter a valid task number.");
+            }
+        }
+    }
+
+    private void unmarkTask(String input) {
+        String[] parts = input.split(" ");
+        if (parts.length == 2) {
+            try {
+                int index = Integer.parseInt(parts[1]);
+                if (index >= 1 && index <= count) {
+                    tasks[index - 1].unmarkDone();
+                    System.out.println(" OK, I've marked this task as not done yet:");
+                    System.out.println("   " + tasks[index - 1]);
+                } else {
+                    System.out.println(" Invalid task number.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(" Please enter a valid task number.");
+            }
+        }
+    }
+
+    private void addTask(String input) {
+        if (count < 100) {
+            tasks[count] = new Task(input);
+            count++;
+            System.out.println(" added: " + input);
+        } else {
+            System.out.println(" Sorry, the task list is full!");
+        }
+    }
+
+    static class Task {
+        String description;
+        boolean done;
+
+        Task(String description) {
+            this.description = description;
+            this.done = false;
+        }
+
+        void markDone() {
+            done = true;
+        }
+
+        void unmarkDone() {
+            done = false;
+        }
+
+        public String toString() {
+            return (done ? "[X]" : "[ ]") + " " + description;
+        }
+    }
+}
+
