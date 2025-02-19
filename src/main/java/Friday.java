@@ -1,10 +1,10 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Friday {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        Task[] tasks = new Task[100];
-        int count = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
 
         System.out.println("____________________________________________________________");
         System.out.println(" Hello! I'm Friday");
@@ -23,18 +23,18 @@ public class Friday {
                 } else if (input.equals("list")) {
                     System.out.println("____________________________________________________________");
                     System.out.println(" Here are the tasks in your list:");
-                    for (int i = 0; i < count; i++) {
-                        System.out.println(" " + (i + 1) + "." + tasks[i]);
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println(" " + (i + 1) + "." + tasks.get(i));
                     }
                     System.out.println("____________________________________________________________");
                 } else if (input.startsWith("mark ")) {
                     try {
                         int index = Integer.parseInt(input.split(" ")[1]) - 1;
-                        if (index >= 0 && index < count) {
-                            tasks[index].markDone();
+                        if (index >= 0 && index < tasks.size()) {
+                            tasks.get(index).markDone();
                             System.out.println("____________________________________________________________");
                             System.out.println(" Marked task as done:");
-                            System.out.println("   " + tasks[index]);
+                            System.out.println("   " + tasks.get(index));
                             System.out.println("____________________________________________________________");
                         } else {
                             throw new FridayException(" Whoops, that number is out of range.");
@@ -45,11 +45,11 @@ public class Friday {
                 } else if (input.startsWith("unmark ")) {
                     try {
                         int index = Integer.parseInt(input.split(" ")[1]) - 1;
-                        if (index >= 0 && index < count) {
-                            tasks[index].unmarkDone();
+                        if (index >= 0 && index < tasks.size()) {
+                            tasks.get(index).unmarkDone();
                             System.out.println("____________________________________________________________");
                             System.out.println(" OK, I've marked this task as not done yet:");
-                            System.out.println("   " + tasks[index]);
+                            System.out.println("   " + tasks.get(index));
                             System.out.println("____________________________________________________________");
                         } else {
                             throw new FridayException(" Whoops, that number is out of range.");
@@ -62,12 +62,11 @@ public class Friday {
                     if (description.isEmpty()) {
                         throw new FridayException(" Whoops, its empty.");
                     } else {
-                        tasks[count] = new Todo(description);
-                        count++;
+                        tasks.add(new Todo(description));
                         System.out.println("____________________________________________________________");
                         System.out.println(" Got it. I've added this task:");
-                        System.out.println("   " + tasks[count - 1]);
-                        System.out.println(" Now you have " + count + " tasks in the list.");
+                        System.out.println("   " + tasks.get(tasks.size() - 1));
+                        System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
                         System.out.println("____________________________________________________________");
                     }
                 } else if (input.startsWith("deadline ")) {
@@ -75,12 +74,11 @@ public class Friday {
                     if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
                         throw new FridayException(" Whoops, no deadline added.");
                     } else {
-                        tasks[count] = new Deadline(parts[0], parts[1]);
-                        count++;
+                        tasks.add(new Deadline(parts[0], parts[1]));
                         System.out.println("____________________________________________________________");
                         System.out.println(" Got it. I've added this task:");
-                        System.out.println("   " + tasks[count - 1]);
-                        System.out.println(" Now you have " + count + " tasks in the list.");
+                        System.out.println("   " + tasks.get(tasks.size() - 1));
+                        System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
                         System.out.println("____________________________________________________________");
                     }
                 } else if (input.startsWith("event ")) {
@@ -88,12 +86,11 @@ public class Friday {
                     if (parts.length < 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
                         throw new FridayException(" Whoops, no date added.");
                     } else {
-                        tasks[count] = new Event(parts[0], parts[1], parts[2]);
-                        count++;
+                        tasks.add(new Event(parts[0], parts[1], parts[2]));
                         System.out.println("____________________________________________________________");
                         System.out.println(" Got it. I've added this task:");
-                        System.out.println("   " + tasks[count - 1]);
-                        System.out.println(" Now you have " + count + " tasks in the list.");
+                        System.out.println("   " + tasks.get(tasks.size() - 1));
+                        System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
                         System.out.println("____________________________________________________________");
                     }
                 } else if (input.startsWith("delete ")) {
@@ -101,14 +98,10 @@ public class Friday {
                         int index = Integer.parseInt(input.split(" ")[1]) - 1;
                         System.out.println("____________________________________________________________");
                         System.out.println(" Got it. I've deleted this task:");
-                        System.out.println("   " + tasks[index]);
-                        if (index >= 0 && index < count) {
-                            for (int i = index; i < count - 1; i++) {
-                                tasks[i] = tasks[i + 1];
-                            }
-                            tasks[count - 1] = null;
-                            count--;
-                            System.out.println(" Now you have " + count + " tasks in the list.");
+                        System.out.println("   " + tasks.get(index));
+                        if (index >= 0 && index < tasks.size()) {
+                            tasks.remove(index);
+                            System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
                             System.out.println("____________________________________________________________");
                         } else {
                             throw new FridayException(" Whoops, that number is out of range.");
