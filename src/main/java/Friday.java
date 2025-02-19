@@ -5,6 +5,9 @@ public class Friday {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         ArrayList<Task> tasks = new ArrayList<>();
+        TaskStorage taskStorage = new TaskStorage("tasks.txt");
+
+        tasks = taskStorage.loadTasks();
 
         System.out.println("____________________________________________________________");
         System.out.println(" Hello! I'm Friday");
@@ -16,6 +19,7 @@ public class Friday {
 
             try {
                 if (input.equals("bye")) {
+                    taskStorage.saveTasks(tasks);
                     System.out.println("____________________________________________________________");
                     System.out.println(" Goodbye!");
                     System.out.println("____________________________________________________________");
