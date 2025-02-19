@@ -40,9 +40,7 @@ public class Friday {
                             throw new FridayException(" Whoops, that number is out of range.");
                         }
                     } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                        System.out.println("____________________________________________________________");
-                        System.out.println(" Whoops, invalid task number.");
-                        System.out.println("____________________________________________________________");
+                        throw new FridayException(" Whoops, invalid task number.");
                     }
                 } else if (input.startsWith("unmark ")) {
                     try {
@@ -57,9 +55,7 @@ public class Friday {
                             throw new FridayException(" Whoops, that number is out of range.");
                         }
                     } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                        System.out.println("____________________________________________________________");
-                        System.out.println(" Whoops, invalid task number.");
-                        System.out.println("____________________________________________________________");
+                        throw new FridayException(" Whoops, invalid task number.");
                     }
                 } else if (input.startsWith("todo ")) {
                     String description = input.substring(5).trim();
@@ -99,6 +95,26 @@ public class Friday {
                         System.out.println("   " + tasks[count - 1]);
                         System.out.println(" Now you have " + count + " tasks in the list.");
                         System.out.println("____________________________________________________________");
+                    }
+                } else if (input.startsWith("delete ")) {
+                    try {
+                        int index = Integer.parseInt(input.split(" ")[1]) - 1;
+                        System.out.println("____________________________________________________________");
+                        System.out.println(" Got it. I've deleted this task:");
+                        System.out.println("   " + tasks[index]);
+                        if (index >= 0 && index < count) {
+                            for (int i = index; i < count - 1; i++) {
+                                tasks[i] = tasks[i + 1];
+                            }
+                            tasks[count - 1] = null;
+                            count--;
+                            System.out.println(" Now you have " + count + " tasks in the list.");
+                            System.out.println("____________________________________________________________");
+                        } else {
+                            throw new FridayException(" Whoops, that number is out of range.");
+                        }
+                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                        throw new FridayException(" Whoops, invalid task number.");
                     }
                 } else {
                     throw new FridayException("Say that again?");
