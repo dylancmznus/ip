@@ -2,6 +2,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Friday {
+    public static void printGotIt(ArrayList<Task> tasks) {
+        System.out.println("____________________________________________________________");
+        System.out.println(" Got it. I've added this task:");
+        System.out.println("   " + tasks.get(tasks.size() - 1));
+        System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+        System.out.println("____________________________________________________________");
+    }
+
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         ArrayList<Task> tasks = new ArrayList<>();
@@ -67,11 +75,7 @@ public class Friday {
                         throw new FridayException(" Whoops, its empty.");
                     } else {
                         tasks.add(new Todo(description));
-                        System.out.println("____________________________________________________________");
-                        System.out.println(" Got it. I've added this task:");
-                        System.out.println("   " + tasks.get(tasks.size() - 1));
-                        System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
-                        System.out.println("____________________________________________________________");
+                        printGotIt(tasks);
                     }
                 } else if (input.startsWith("deadline ")) {
                     String[] parts = input.substring(9).split(" /by ", 2);
@@ -79,11 +83,7 @@ public class Friday {
                         throw new FridayException(" Whoops, no deadline added.");
                     } else {
                         tasks.add(new Deadline(parts[0], parts[1]));
-                        System.out.println("____________________________________________________________");
-                        System.out.println(" Got it. I've added this task:");
-                        System.out.println("   " + tasks.get(tasks.size() - 1));
-                        System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
-                        System.out.println("____________________________________________________________");
+                        printGotIt(tasks);
                     }
                 } else if (input.startsWith("event ")) {
                     String[] parts = input.substring(6).split(" /from | /to ", 3);
@@ -91,11 +91,7 @@ public class Friday {
                         throw new FridayException(" Whoops, no date added.");
                     } else {
                         tasks.add(new Event(parts[0], parts[1], parts[2]));
-                        System.out.println("____________________________________________________________");
-                        System.out.println(" Got it. I've added this task:");
-                        System.out.println("   " + tasks.get(tasks.size() - 1));
-                        System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
-                        System.out.println("____________________________________________________________");
+                        printGotIt(tasks);
                     }
                 } else if (input.startsWith("delete ")) {
                     try {

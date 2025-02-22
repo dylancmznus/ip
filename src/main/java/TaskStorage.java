@@ -22,13 +22,15 @@ public class TaskStorage {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 if (line.startsWith("[T]")) {
-                    tasks.add(new Todo(line.substring(4)));  // Assuming description starts after "[T] "
+                    tasks.add(new Todo(line.substring(7)));  // Assuming description starts after "[T] "
                 } else if (line.startsWith("[D]")) {
-                    String[] parts = line.substring(4).split(" /by ");
+                    String[] parts = line.substring(7).split(" by: ", 2);
                     tasks.add(new Deadline(parts[0], parts[1]));
+                    //System.out.println(line);
                 } else if (line.startsWith("[E]")) {
-                    String[] parts = line.substring(4).split(" /from | /to ", 3);
+                    String[] parts = line.substring(7).split(" from: | to: ", 3);
                     tasks.add(new Event(parts[0], parts[1], parts[2]));
+                    //System.out.println(line);
                 }
             }
         } catch (FileNotFoundException e) {
