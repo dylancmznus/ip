@@ -10,6 +10,25 @@ public class Friday {
         System.out.println("____________________________________________________________");
     }
 
+    public static void findTasks(ArrayList<Task> tasks, String keyword) {
+        System.out.println("____________________________________________________________");
+        System.out.println("Found matches in your list:");
+
+        int count = 0;
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (task.getDescription().contains(keyword)) {
+                count++;
+                System.out.println(count + "." + task);
+            }
+        }
+
+        if (count == 0) {
+            System.out.println("Found no matches");
+        }
+        System.out.println("____________________________________________________________");
+    }
+
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         ArrayList<Task> tasks = new ArrayList<>();
@@ -109,6 +128,9 @@ public class Friday {
                     } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                         throw new FridayException(" Whoops, invalid task number.");
                     }
+                } else if (input.startsWith("find")) {
+                    String keyword = input.substring(5).trim(); // Extract keyword after "find "
+                    findTasks(tasks, keyword);
                 } else {
                     throw new FridayException("Say that again?");
                 }
