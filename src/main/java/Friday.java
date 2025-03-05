@@ -2,144 +2,109 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Friday {
-    public static void printGotIt(ArrayList<Task> tasks) {
-        System.out.println("____________________________________________________________");
-        System.out.println(" Got it. I've added this task:");
-        System.out.println("   " + tasks.get(tasks.size() - 1));
-        System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
-        System.out.println("____________________________________________________________");
+
+    private Storage storage;
+    private TaskList tasks;
+    private Ui ui;
+    private Parser parser;
+
+    public Friday(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
+        parser = new Parser();
+        tasks = new TaskList(storage.loadTasks());
     }
 
-    public static void findTasks(ArrayList<Task> tasks, String keyword) {
-        System.out.println("____________________________________________________________");
-        System.out.println("Found matches in your list:");
+    public void run() {
+        ui.printHello();
+        boolean isRunning = true;
+        while (isRunning) {
+            String input = ui.getUserInput(); //get user input command
+            String command = parser.parseCommand(input);
+            isRunning = handleCommand(command, input);
+        }
+    }
 
-        int count = 0;
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
-            if (task.getDescription().contains(keyword)) {
-                count++;
-                System.out.println(count + "." + task);
+    private boolean handleCommand(String command, String input) {
+        try {
+            switch (command) {
+                case "bye":
+                    ui.printGoodbye();
+                    storage.saveTasks(tasks.getTasks()); //save txt file before closing
+                    return false;
+                case "list":
+                    ui.printTaskList(tasks);
+                    break;
+                case "mark":
+                    try {
+                        int markIndex = parser.getTaskIndex(input, tasks.size());
+                        tasks.markTaskAsDone(markIndex);
+                        ui.printMarkedTask(tasks.get(markIndex));
+                    } catch (FridayException e) {
+                        ui.printError(e.getMessage());
+                    }
+                    break;
+                case "unmark":
+                    try {
+                        int unmarkIndex = parser.getTaskIndex(input, tasks.size());
+                        tasks.unmarkTask(unmarkIndex);
+                        ui.printUnmarkedTask(tasks.get(unmarkIndex));
+                    } catch (FridayException e) {
+                        ui.printError(e.getMessage());
+                    }
+                    break;
+                case "todo":
+                    String todoDescription = parser.extractDescription(input);
+                    if (todoDescription.isEmpty()) {
+                        ui.printError("Whoops, it's empty.");
+                    } else {
+                        tasks.addTask(new Todo(todoDescription));
+                        ui.printAddedTask(tasks.getLastTask(), tasks);
+                    }
+                    break;
+                case "deadline":
+                    String[] deadlineDetails = parser.extractDeadlineDetails(input);
+                    if (deadlineDetails.length == 2) {
+                        tasks.addTask(new Deadline(deadlineDetails[0], deadlineDetails[1]));
+                        ui.printAddedTask(tasks.getLastTask(), tasks);
+                    } else {
+                        ui.printError("Whoops, no deadline added.");
+                    }
+                    break;
+                case "event":
+                    String[] eventDetails = parser.extractEventDetails(input);
+                    if (eventDetails.length == 3) {
+                        tasks.addTask(new Event(eventDetails[0], eventDetails[1], eventDetails[2]));
+                        ui.printAddedTask(tasks.getLastTask(), tasks);
+                    } else {
+                        ui.printError("Whoops, no event date added.");
+                    }
+                    break;
+                case "delete":
+                    try {
+                        int deleteIndex = parser.getTaskIndex(input, tasks.size());
+                        tasks.deleteTask(deleteIndex);
+                        ui.printDeletedTask(tasks.getLastDeletedTask(), tasks);
+                    } catch (FridayException e) {
+                        ui.printError(e.getMessage());
+                    }
+                    break;
+                case "find":
+                    String findKeyword = parser.extractKeyword(input);
+                    ui.printFoundTasks(tasks.findTasks(findKeyword));
+                    break;
+                default:
+                    ui.printUnknownCommand();
             }
+        } catch (Exception e) {
+            ui.printError("Something went wrong.");
         }
 
-        if (count == 0) {
-            System.out.println("Found no matches");
-        }
-        System.out.println("____________________________________________________________");
+        return true;
     }
 
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        ArrayList<Task> tasks = new ArrayList<>();
-        TaskStorage taskStorage = new TaskStorage("tasks.txt");
-
-        tasks = taskStorage.loadTasks();
-
-        System.out.println("____________________________________________________________");
-        System.out.println(" Hello! I'm Friday");
-        System.out.println(" What can I do for you?");
-        System.out.println("____________________________________________________________");
-
-        while (true) {
-            String input = scan.nextLine();
-
-            try {
-                if (input.equals("bye")) {
-                    taskStorage.saveTasks(tasks);
-                    System.out.println("____________________________________________________________");
-                    System.out.println(" Goodbye!");
-                    System.out.println("____________________________________________________________");
-                    break;
-                } else if (input.equals("list")) {
-                    System.out.println("____________________________________________________________");
-                    System.out.println(" Here are the tasks in your list:");
-                    for (int i = 0; i < tasks.size(); i++) {
-                        System.out.println(" " + (i + 1) + "." + tasks.get(i));
-                    }
-                    System.out.println("____________________________________________________________");
-                } else if (input.startsWith("mark ")) {
-                    try {
-                        int index = Integer.parseInt(input.split(" ")[1]) - 1;
-                        if (index >= 0 && index < tasks.size()) {
-                            tasks.get(index).markDone();
-                            System.out.println("____________________________________________________________");
-                            System.out.println(" Marked task as done:");
-                            System.out.println("   " + tasks.get(index));
-                            System.out.println("____________________________________________________________");
-                        } else {
-                            throw new FridayException(" Whoops, that number is out of range.");
-                        }
-                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                        throw new FridayException(" Whoops, invalid task number.");
-                    }
-                } else if (input.startsWith("unmark ")) {
-                    try {
-                        int index = Integer.parseInt(input.split(" ")[1]) - 1;
-                        if (index >= 0 && index < tasks.size()) {
-                            tasks.get(index).unmarkDone();
-                            System.out.println("____________________________________________________________");
-                            System.out.println(" OK, I've marked this task as not done yet:");
-                            System.out.println("   " + tasks.get(index));
-                            System.out.println("____________________________________________________________");
-                        } else {
-                            throw new FridayException(" Whoops, that number is out of range.");
-                        }
-                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                        throw new FridayException(" Whoops, invalid task number.");
-                    }
-                } else if (input.startsWith("todo ")) {
-                    String description = input.substring(5).trim();
-                    if (description.isEmpty()) {
-                        throw new FridayException(" Whoops, its empty.");
-                    } else {
-                        tasks.add(new Todo(description));
-                        printGotIt(tasks);
-                    }
-                } else if (input.startsWith("deadline ")) {
-                    String[] parts = input.substring(9).split(" /by ", 2);
-                    if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
-                        throw new FridayException(" Whoops, no deadline added.");
-                    } else {
-                        tasks.add(new Deadline(parts[0], parts[1]));
-                        printGotIt(tasks);
-                    }
-                } else if (input.startsWith("event ")) {
-                    String[] parts = input.substring(6).split(" /from | /to ", 3);
-                    if (parts.length < 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
-                        throw new FridayException(" Whoops, no date added.");
-                    } else {
-                        tasks.add(new Event(parts[0], parts[1], parts[2]));
-                        printGotIt(tasks);
-                    }
-                } else if (input.startsWith("delete ")) {
-                    try {
-                        int index = Integer.parseInt(input.split(" ")[1]) - 1;
-                        System.out.println("____________________________________________________________");
-                        System.out.println(" Got it. I've deleted this task:");
-                        System.out.println("   " + tasks.get(index));
-                        if (index >= 0 && index < tasks.size()) {
-                            tasks.remove(index);
-                            System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
-                            System.out.println("____________________________________________________________");
-                        } else {
-                            throw new FridayException(" Whoops, that number is out of range.");
-                        }
-                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                        throw new FridayException(" Whoops, invalid task number.");
-                    }
-                } else if (input.startsWith("find")) {
-                    String keyword = input.substring(5).trim(); // Extract keyword after "find "
-                    findTasks(tasks, keyword);
-                } else {
-                    throw new FridayException("Say that again?");
-                }
-            } catch (FridayException e) {
-                System.out.println("____________________________________________________________");
-                System.out.println(e.getMessage());
-                System.out.println("____________________________________________________________");
-            }
-        }
-        scan.close();
+        new Friday("tasks.txt").run(); //run program
     }
 }
+

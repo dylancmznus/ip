@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-public class TaskStorage {
+public class Storage {
     private final String filePath;
 
-    public TaskStorage(String filePath) {
+    public Storage(String filePath) {
         this.filePath = filePath;
     }
     public ArrayList<Task> loadTasks() {
