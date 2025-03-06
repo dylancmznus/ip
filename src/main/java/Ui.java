@@ -1,16 +1,18 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+//class for managing printing relevant output of texts
 public class Ui {
 
-    public void printHello() {
+    public void printHello() { //on startup, say hello
         System.out.println("____________________________________________________________");
         System.out.println(" Hello! I'm Friday");
         System.out.println(" What can I do for you?");
         System.out.println("____________________________________________________________");
     }
 
-    public void printGoodbye() {
+    public void printGoodbye() { //on closing say goodbye
         System.out.println("____________________________________________________________");
         System.out.println(" Goodbye!");
         System.out.println("____________________________________________________________");

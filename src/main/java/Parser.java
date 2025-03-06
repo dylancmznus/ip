@@ -1,10 +1,12 @@
 public class Parser {
 
+    //split parts of input to find command
     public String parseCommand(String input) {
         String[] parts = input.split(" ", 2);
         return parts[0].toLowerCase();
     }
 
+    //obtain task index number
     public int getTaskIndex(String input, int listSize) throws FridayException {
         try {
             int index = Integer.parseInt(input.split(" ")[1]) - 1;
