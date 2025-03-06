@@ -1,26 +1,39 @@
-# Duke project template
+# User Guide - Friday
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+Friday is a personal task manager to manages todos, deadlines and events.
+Type these commands into the interface to use the chatbot.
 
-## Setting up in Intellij
+1. Add a todo:
+> todo [description]
+eg. todo read book
 
-Prerequisites: JDK 17, update Intellij to the most recent version.
+2. Add a deadline:
+> deadline [description] /by [time]
+eg. deadline return book /by January
 
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+3. Add an event:
+> event [description] /from [start time] /to [end time]
+eg. event project meeting /from 2025-03-12 /to 2025-03-15
 
-**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+4. List all tasks:
+> list
+
+5. Mark a task as done:
+> mark [task number]
+eg. mark 1
+
+6. Unmark a task:
+> unmark [task number]
+eg. unmark 4
+
+7. Delete a task:
+> delete [task number]
+eg. delete 2
+
+8. Find certain tasks using a keyword:
+> find [keyword]
+eg. find book
+This will list all tasks with "book" in the description.
+
+9. Close the program:
+> bye
