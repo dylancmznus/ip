@@ -84,8 +84,8 @@ public class Friday {
                 case "delete":
                     try {
                         int deleteIndex = parser.getTaskIndex(input, tasks.size());
+                        ui.printDeletedTask(tasks.get(deleteIndex), tasks);
                         tasks.deleteTask(deleteIndex);
-                        ui.printDeletedTask(tasks.getLastDeletedTask(), tasks);
                     } catch (FridayException e) {
                         ui.printError(e.getMessage());
                     }
