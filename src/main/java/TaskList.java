@@ -26,11 +26,6 @@ public class TaskList {
         return tasks.get(tasks.size() - 1);
     }
 
-    //get the deleted task
-    public Task getLastDeletedTask() {
-        return tasks.get(tasks.size() - 1);
-    }
-
     public void addTask(Task task) {
         tasks.add(task);
     }
