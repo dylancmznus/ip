@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+//main class
 public class Friday {
 
     private Storage storage;

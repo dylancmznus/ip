@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+//Storage class for manageing tasks txt file for saving data after closing program
 public class Storage {
     private final String filePath;
 

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+//Task list class for managing the list of tasks
 public class TaskList {
     private ArrayList<Task> tasks;
 
@@ -15,14 +16,17 @@ public class TaskList {
         return tasks;
     }
 
+    //get this certain task
     public Task get(int index) {
         return tasks.get(index);
     }
 
+    //get the last task
     public Task getLastTask() {
         return tasks.get(tasks.size() - 1);
     }
 
+    //get the deleted task
     public Task getLastDeletedTask() {
         return tasks.get(tasks.size() - 1);
     }
@@ -43,6 +47,7 @@ public class TaskList {
         tasks.get(index).unmarkDone();
     }
 
+    //get size of the current list
     public int size() {
         return tasks.size();
     }
