@@ -5,13 +5,26 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-//Storage class for manageing tasks txt file for saving data after closing program
+/**
+ * Handles the saving and loading of tasks from a file, ensuring persistence across program runs.
+ */
 public class Storage {
     private final String filePath;
 
+    /**
+     * Sets the file path for storage.
+     *
+     * @param filePath Path of the file to store tasks.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
+
+    /**
+     * Loads tasks from txt file.
+     *
+     * @return List of tasks stored in the file.
+     */
     public ArrayList<Task> loadTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
         File f = new File(filePath);
@@ -38,6 +51,12 @@ public class Storage {
         }
         return tasks;
     }
+
+    /**
+     * Saves the current list of tasks to the txt file.
+     *
+     * @param tasks List of tasks to save.
+     */
     public void saveTasks(ArrayList<Task> tasks) {
         try (FileWriter fw = new FileWriter(filePath)) {
             for (Task task : tasks) {
