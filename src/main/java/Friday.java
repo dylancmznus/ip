@@ -1,7 +1,10 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-//main class
+/**
+ * Main class for the Friday task management program.
+ * Handles user commands, task storage, and user interaction.
+ */
 public class Friday {
 
     private Storage storage;
@@ -9,6 +12,13 @@ public class Friday {
     private Ui ui;
     private Parser parser;
 
+    /**
+     * Constructs a Friday object.
+     * Initializes the UI, storage, task list, and parser.
+     * Loads tasks from the save file.
+     *
+     * @param filePath The storage path.
+     */
     public Friday(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
@@ -26,6 +36,13 @@ public class Friday {
         }
     }
 
+    /**
+     * Handles user commands and carries out the tasks accordingly.
+     *
+     * @param command The parsed command keyword.
+     * @param input   The user input.
+     * @return False if  command is "bye" to stop the run, else always true.
+     */
     private boolean handleCommand(String command, String input) {
         try {
             switch (command) {
@@ -104,6 +121,11 @@ public class Friday {
         return true;
     }
 
+    /**
+     * Main method to initialize and run the program.
+     * Loads all tasks from tasks.txt file and starts the run.
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         new Friday("tasks.txt").run(); //run program
     }

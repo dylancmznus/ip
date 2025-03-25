@@ -2,6 +2,10 @@ public abstract class Task {
     protected String description;
     protected boolean done;
 
+    /**
+     * Initialize a task with a given description.
+     * @param description The task description.
+     */
     public Task(String description) {
         this.description = description;
         this.done = false;
@@ -9,6 +13,14 @@ public abstract class Task {
 
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Checks if the task is marked as done.
+     * @return True if done, if not false.
+     */
+    public boolean isDone() {
+        return done;
     }
 
     public void markDone() {
